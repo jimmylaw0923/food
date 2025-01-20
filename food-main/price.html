@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>付款 - JIM餐馆</title>
+    <link rel="stylesheet" href="button.css" />
+    <style>
+        /* 页面标题样式 */
+        .tit {
+            text-align: center;
+            font-size: 2em;
+            color: #333;
+        }
+
+        /* 订单列表样式 */
+        #order-list {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* 结账按钮样式 */
+        .button-6 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .button-6:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body class="tit" onload="displayOrder()">
+
+    <header>
+        <h1>结账</h1>
+    </header>
+
+    <main>
+        <div id="order-list"></div>
+
+        <button class="button-6" onclick="downloadOrder()">
+            <h1>结账</h1>
+        </button>
+    </main>
+
+    <div class="home">
+        <a href="index1.html">
+            <button class="button-4">
+                <img src="C:\HTML\photo\images/images/home.png" width="60">
+            </button>
+        </a>
+    </div>
+
+    <script>
+        // 获取当前用户
+        const currentUsername = localStorage.getItem('currentUsername');
+        if (!currentUsername) {
+            window.location.href = 'login.html'; // 如果用户没有登录，跳转到登录页面
+        }
+
+        // 显示订单列表
+        function displayOrder() {
+            const orderListDiv = document.getElementById('order-list');
+            orderListDiv.innerHTML = ''; // 清空当前列表
+
+            // 获取当前用户的订单
+            let order = JSON.parse(localStorage.getItem(`order_${currentUsername}`)) || [];
+
+            // 如果订单为空，显示提示信息
+            if (order.length === 0) {
+                orderListDiv.innerHTML = '<p>您的订单是空的。</p>';
+                return;
+            }
+
+            // 显示每个订单项
+            order.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.innerHTML = `${item}`;
+                orderListDiv.appendChild(itemDiv);
+            });
+        }
+
+        // 下载订单为文本文件，并清空订单
+        function downloadOrder() {
+            let order = JSON.parse(localStorage.getItem(`order_${currentUsername}`)) || [];
+            let additionalText = "MAMAK档\n\nNO1\nJALAN MAMAK\n01234 KEDAH\nMALAYSIA\n\n已付款:\n"; // 你想添加的额外文字
+            let additionalText1 = "\n\n下次光临\n"; // 你想添加的额外文字
+            let orderText = additionalText + order.join("\n") + additionalText1; // 先定义 additionalText 和 additionalText1
+
+            // 创建Blob对象并下载文件
+            let blob = new Blob([orderText], { type: "text/plain" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `${currentUsername}_receipt.txt`;
+            link.click();
+
+            // 清除当前用户的订单数据
+            localStorage.removeItem(`order_${currentUsername}`);
+
+            // 更新页面显示
+            displayOrder();
+
+            // 提示用户订单已成功结账
+            alert('您的订单已成功结账并已清空！');
+        }
+    </script>
+
+</body>
+
+</html>
