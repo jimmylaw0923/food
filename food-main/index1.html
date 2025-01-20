@@ -10,7 +10,46 @@
     <link rel="stylesheet" href="text.css" />
     <link rel="stylesheet" href="button.css" />
 </head>
+    
+    <style>
+/* 默认样式，适用于桌面 */
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
 
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 对于宽度小于等于768px的设备（如平板或手机） */
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+}
+
+/* 对于宽度小于等于480px的设备（如手机） */
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 5px;
+  }
+}
+
+        </style>
+    
 <body>
 
     <body>
